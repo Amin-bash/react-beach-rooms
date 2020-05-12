@@ -8,7 +8,7 @@ export const Rooms = () => {
 	return (
 		<React.Fragment>
 			<Hero hero="roomsHero">
-				<Banner title="Our rooms">
+				<Banner title="Our Features">
 					<Link to="/" className="btn-primary">
 						Return home
 					</Link>

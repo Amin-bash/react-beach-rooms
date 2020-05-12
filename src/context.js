@@ -24,18 +24,20 @@ class RoomProvider extends Component {
 	// Get data
 	getData = async () => {
 		try {
-
 			let response = await Client.getEntries({
-        content_type: 'beachRooms',
-        order: "sys.createdAt"
-      });
+				content_type: 'beachRooms',
+				order: 'sys.createdAt'
+			});
 			let rooms = this.formatData(response.items);
 			let featuredRooms = rooms.filter((room) => room.featured === true);
 
-			let maxPrice
-			let maxSize;
-			maxPrice = Math.max(...rooms.map((item) => maxPrice = item.price));
-			maxSize =  Math.max(...rooms.map((item) => maxSize = item.size));
+			let maxPrice = rooms[0].price;
+			let maxSize = rooms[0].size;
+			//Get maxPrice and maxSize
+			[ ...rooms ].forEach((item) => {
+				item.price > maxPrice && (maxPrice = item.price);
+				item.size > maxSize && (maxSize = item.size);
+			});
 
 			this.setState({
 				rooms,
@@ -45,8 +47,7 @@ class RoomProvider extends Component {
 				price: maxPrice,
 				maxPrice,
 				maxSize
-      });
-      
+			});
 		} catch (error) {
 			console.log(error);
 		}
@@ -57,16 +58,17 @@ class RoomProvider extends Component {
 	}
 
 	formatData(items) {
-		console.log(items);
-		
-		let tempItems = items.map((item) => {
-      let id = item.sys.id;
-			let images = item.fields.images.map((image) => {
-				return image.fields.file.url;
-			});
-			let room = { ...item.fields, images, id };
-			return room;
-		});
+		let tempItems = items
+			.map((item) => {
+				let id = item.sys.id;
+				let images = item.fields.images.map((image) => {
+					return image.fields.file.url;
+				});
+				let room = { ...item.fields, images, id };
+				return room;
+			})
+			.sort((a, b) => (a.price < b.price ? 1 : -1));
+
 		return tempItems;
 	}
 
@@ -94,8 +96,49 @@ class RoomProvider extends Component {
 
 		// All the rooms
 		let tempRooms = [ ...rooms ];
+		let newArr = [];
+
 		// Transform  value
 		capacity = parseInt(capacity);
+
+		// All the rooms
+		console.log(type);
+
+		// tempRooms.forEach((item) => {
+
+
+		// 	// if it's all
+		// 	(type === 'all') && (newArr.push(item));
+
+		// 	// Filter by type
+		// 	if (type !== 'all') {
+		// 		item.type === type && (newArr.push(item));
+		// 	}
+
+		// 	// Filter by capacity
+		// 	if (capacity !== 1) {
+		// 		(item.capacity >= capacity) && (newArr.push(item));
+		// 	}
+
+		// 	// // Filter by price
+		// 	(item.price <= price) && (newArr.push(item));
+		
+		// 	// // Filter by size
+		// 	(item.size >= minSize && item.size < maxSize) && (newArr.push(item));
+
+		// 	// Filter by breakfast
+		// 	if (breakfast) {
+		// 		item.breakfast === true && (newArr.push(item));
+		// 	}
+
+		// 	// Filter b pets
+		// 	if (pets) {
+		// 	item.pets === true && (newArr.push(item));
+		// 	}
+
+		// });
+
+		console.log(newArr, 'my new arr');
 
 		// Filter by type
 		if (type !== 'all') {
