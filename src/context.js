@@ -94,77 +94,19 @@ class RoomProvider extends Component {
 	filterRooms = () => {
 		let { rooms, type, capacity, price, minSize, maxSize, breakfast, pets } = this.state;
 
-		// All the rooms
+		// // All the rooms
 		let tempRooms = [ ...rooms ];
-		let newArr = [];
 
-		// Transform  value
+		// // Transform  value
 		capacity = parseInt(capacity);
 
-		// All the rooms
-		console.log(type);
-
-		// tempRooms.forEach((item) => {
-
-
-		// 	// if it's all
-		// 	(type === 'all') && (newArr.push(item));
-
-		// 	// Filter by type
-		// 	if (type !== 'all') {
-		// 		item.type === type && (newArr.push(item));
-		// 	}
-
-		// 	// Filter by capacity
-		// 	if (capacity !== 1) {
-		// 		(item.capacity >= capacity) && (newArr.push(item));
-		// 	}
-
-		// 	// // Filter by price
-		// 	(item.price <= price) && (newArr.push(item));
-		
-		// 	// // Filter by size
-		// 	(item.size >= minSize && item.size < maxSize) && (newArr.push(item));
-
-		// 	// Filter by breakfast
-		// 	if (breakfast) {
-		// 		item.breakfast === true && (newArr.push(item));
-		// 	}
-
-		// 	// Filter b pets
-		// 	if (pets) {
-		// 	item.pets === true && (newArr.push(item));
-		// 	}
-
-		// });
-
-		console.log(newArr, 'my new arr');
-
-		// Filter by type
-		if (type !== 'all') {
-			tempRooms = tempRooms.filter((room) => room.type === type);
-		}
-
-		// filter by capacity
-		if (capacity !== 1) {
-			tempRooms = tempRooms.filter((room) => room.capacity >= capacity);
-		}
-
-		// Filter by price
-		tempRooms = tempRooms.filter((room) => room.price <= price);
-
-		// Filter by size
-		tempRooms = tempRooms.filter((room) => room.size >= minSize && room.size < maxSize);
-
-		// Filter by breakfast
-		if (breakfast) {
-			tempRooms = tempRooms.filter((room) => room.breakfast === true);
-		}
-
-		// Filter by pets
-		if (pets) {
-			tempRooms = tempRooms.filter((room) => room.pets === true);
-		}
+		tempRooms = rooms.filter(room => room.price <= price
+			&& (type === 'all' || room.type === type)
+			&& (capacity === 1 || room.capacity >= capacity)
+			&& (!breakfast || room.breakfast === true)
+			&& (room.size >= minSize && room.size < maxSize)
+			&& (!pets || room.pets === true)
+			)
 
 		// Change the state
 		this.setState({

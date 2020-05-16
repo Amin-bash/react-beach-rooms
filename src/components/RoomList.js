@@ -1,5 +1,6 @@
 import React from 'react'
 import Room from './Room'
+import Loading from './Loading'
 
 export default function RoomList({rooms}) {
   if (rooms.length === 0) {
@@ -9,11 +10,13 @@ export default function RoomList({rooms}) {
       </div>
     )
   }
+
   return (
     <section className="roomslist">
       <div className="roomslist-center">
         {
           rooms.map(item => {
+            if (!item.images) {return <Loading />}
             return <Room key={item.id} room={item} />;
           })
         }
